@@ -1,7 +1,7 @@
 {
     "name": "gherman/deploynaut-rainforest-metrics",
     "description": "Provides an interface to Graphite in the Deploynaut dashboard.",
-    "type": "module",
+    "type": "silverstripe-module",
     "license": "MIT",
     "authors": [
         {
