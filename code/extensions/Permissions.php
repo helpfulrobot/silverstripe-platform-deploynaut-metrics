@@ -7,22 +7,20 @@ namespace DashboardMetrics;
 
 class Permissions extends \DNRoot implements \PermissionProvider {
 
-	const ALLOW_ENVIRONMENT_CONFIG_READ = 'ALLOW_ENVIRONMENT_CONFIG_READ';
+	const ALLOW_ENVIRONMENT_METRICS_READ = 'ALLOW_ENVIRONMENT_METRICS_READ';
 
-	// public static $allowed_actions = array(
-	// 	'save'
-	// );
-
-	public function init() {
-		parent::init();
-
-		$project = $this->getCurrentProject();
-		if(!$project) {
-			return $this->project404Response();
-		}
-
-		if(!$project->allowed(self::ALLOW_ENVIRONMENT_CONFIG_READ)) {
-			return \Security::permissionFailure();
-		}
+		/**
+	 * Return a map of permission codes to add to the dropdown shown in the Security section of the CMS.
+	 * array(
+	 *   'VIEW_SITE' => 'View the site',
+	 * );
+	 */
+	public function providePermissions() {
+		return array(
+			self::ALLOW_ENVIRONMENT_METRICS_READ => array(
+				'name' => "Read access to environment metrics",
+				'category' => "Deploynaut",
+			)
+		);
 	}
 }
