@@ -1,20 +1,50 @@
 <?php
 
+namespace DashboardMetrics;
+
 /**
  * Primary controller for the Metrics interface
  *
  * @package  deploynaut-rainforest-metrics
  * @author  Garion Herman <garion@silverstripe.com>
  */
-class MetricsController extends DNRoot {
+class Dispatcher extends \DNRoot {
 
-	public static $url_handlers = array(
-		'$Project!/metrics/$Environment' => 'viewmetrics',
-	);
+	const ACTION_METRICS = 'metrics';
 
 	public static $allowed_actions = array(
 		'viewmetrics'
 	);
+
+	public function init() {
+		parent::init();
+
+		$project = $this->getCurrentProject();
+		if (! $project) {
+			return $this->project404Response();
+		}
+
+		// TODO: Permission checks go here
+	}
+
+	public function index(\SS_HTTPRequest $request) {
+		$this->setCurrentActionType(self::ACTION_METRICS);
+
+		$project = $this->getCurrentProject();
+		if (! $project) {
+			return $this->project404Response();
+		}
+
+		$env = $this->getCurrentEnvironment($project);
+		if (! $env) {
+			return $this->environment404Response();
+		}
+
+		return $this->customise(array(
+			'Environment' => $env
+		))->renderWith(array('DashboardMetrics_metrics', 'DNRoot'));
+	}
+
 
 	/**
 	 * Displays metrics for a project.
@@ -22,37 +52,17 @@ class MetricsController extends DNRoot {
 	 * @return SS_HTTPResponse          The response object
 	 * @todo   Clean up DB logic
 	 */
-	public function viewmetrics(SS_HTTPRequest $request) {
+	public function viewmetrics(\SS_HTTPRequest $request) {
 
-		// debug eet
-		// dd($request);
-// dd($this->getCurrentProject());
-
-
-		$metricResults = [];
-
-		// TODO: Pseudo-code
-		// foreach($metricSet->Metrics() as $metric) {
-		// 	$metricResults[] = $metric->query($cluster, $stack, $environment, '-2hours', 'now');
-		// }
-
-		// $metricResults = new ArrayData(['Metrics' => $metricResults]);
-
-		// return $this->customise([
-		// 	'Title' => 'IT ME, METRICK',
-		// 	'MetricsData' => $metricResults
-		// ])->render();
-		
-		// var_dump($this->templates);
-		// die();
-		//var_dump(new ArrayData(array('MetricSet' => $metricSet)));
 		return $this->render();
+
 	}
 
 	public function MetricSet() {
+		// TODO: Check if there's an alternative default for this project
 
-		$metricSet = MetricSet::get()->filter(array(
-			'Name' => 'Primary Metrics'
+		$metricSet = \MetricSet::get()->filter(array(
+			'Enabled' => true
 		))->first();
 
 		return $metricSet;
@@ -66,7 +76,7 @@ class MetricsController extends DNRoot {
 	public function Data($metricID) {
 
 		$environmentName = $this->urlParams['Environment'];
-		$metric = Metric::get_by_id('Metric', $metricID);
+		$metric = \Metric::get_by_id('Metric', $metricID);
 		$project = $this->getCurrentProject();
 
 		// If we are on the metrics root page, grab prod data
