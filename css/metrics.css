@@ -1,0 +1,11 @@
+.c3-line {
+  stroke-width: 3px;
+	fill-opacity: 0.1; }
+
+.c3-circle._expanded_ {
+  stroke-width: 5px;
+  stroke: #3aaef9; }
+
+.c3-selected-circle {
+  fill: #3aaef9;
+  stroke-width: 6px; }

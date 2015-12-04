@@ -30,25 +30,25 @@
   fill: #aaa; }
 
 .c3-xgrid, .c3-ygrid {
-  stroke-dasharray: 3 3; }
+  stroke-dasharray: 0 3; }
 
 /*-- Text on Chart --*/
 .c3-text.c3-empty {
   fill: #808080;
-  font-size: 2em; }
+  font-size: 4em; }
 
 /*-- Line --*/
 .c3-line {
-  stroke-width: 1px; }
+  stroke-width: 5px; }
 
 /*-- Point --*/
 .c3-circle._expanded_ {
-  stroke-width: 1px;
+  stroke-width: 5px;
   stroke: white; }
 
 .c3-selected-circle {
   fill: white;
-  stroke-width: 2px; }
+  stroke-width: 8px; }
 
 /*-- Bar --*/
 .c3-bar {
@@ -69,7 +69,7 @@
 
 /*-- Region --*/
 .c3-region {
-  fill: steelblue;
+  fill: #303E4D;
   fill-opacity: 0.1; }
 
 /*-- Brush --*/

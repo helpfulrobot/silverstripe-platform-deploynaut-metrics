@@ -4,7 +4,7 @@ class Metric extends DataObject {
 
 	private static $db = array(
 		'Name' => 'Varchar(100)',
-        'Description' => 'Text',
+    'Description' => 'Text',
 		'Query' => 'Varchar(1000)',
 	);
 
@@ -39,7 +39,7 @@ class Metric extends DataObject {
      * @return [type]              [description]
      * @todo   Make this code less trashy
      */
-    public function query($cluster, $stack, $environment, $startTime = '-24hour', $endTime = 'now') {
+    public function query($cluster, $stack, $environment, $startTime = '-1hour', $endTime = 'now') {
         $url = 'http://metrics.platform.silverstripe.com/render?format=json';
 
         // Timestamps

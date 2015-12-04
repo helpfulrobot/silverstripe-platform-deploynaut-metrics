@@ -10,7 +10,10 @@ $(document).ready(function() {
                 types: {
                     sum: 'bar'
                 }
-            },
+							},
+						color: {
+								pattern: ['#3AAEF9', '#303E4D']
+						},
             axis: {
                 x: {
                     tick: {
