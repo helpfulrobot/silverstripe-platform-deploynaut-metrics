@@ -24,7 +24,9 @@ class Dispatcher extends \DNRoot {
 			return $this->project404Response();
 		}
 
-		// TODO: Permission checks go here
+		if (! $project->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ)) {
+			return \Security::permissionFailure();
+		}
 	}
 
 	public function index(\SS_HTTPRequest $request) {
