@@ -10,7 +10,7 @@ class MenuExtension extends \DataExtension {
 	 * @param \ArrayList $list
 	 */
 	public function updateMenu(\ArrayList $list) {
-		// if (!$this->owner->Backend()->config()->supports_environment_config) return;
+		if (!$this->owner->Backend()->config()->supports_dashboard_metrics) return;
 		if(!$this->owner->Project()->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ)) return;
 
 		$controller = \Controller::curr();
