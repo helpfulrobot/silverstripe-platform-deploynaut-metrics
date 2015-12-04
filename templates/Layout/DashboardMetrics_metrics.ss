@@ -10,19 +10,18 @@
 
 <div class="content">
     <div class="metric-set">
-        <% loop $MetricSet %>
+        <div class="metrics">
+        <% loop $Metrics %>
             <h3>$Name</h3>
             <div class="metrics">
-            <% loop $Metrics %>
                 <div class="metric">
                     <h5>$Name</h5>
-                    <div height="200" class="chart requests" data-metric data-display="$ChartType" data-points='$Up.Up.Data($ID)'></div>
+                    <div height="200" class="chart requests" data-metric data-display="$ChartType" data-points='$Up.Data($ID)'></div>
                     <p>$Description</p>
                 </div>
                 <hr>
-            <% end_loop %>
-            </div>
         <% end_loop %>
+        </div>
     </div>
 </div>
 

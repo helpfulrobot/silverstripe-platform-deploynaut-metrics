@@ -41,7 +41,8 @@ class Dispatcher extends \DNRoot {
 		}
 
 		return $this->customise(array(
-			'Environment' => $env
+			'Environment' => $env,
+			'Metrics' => $this->MetricSet()->metrics()
 		))->renderWith(array('DashboardMetrics_metrics', 'DNRoot'));
 	}
 
@@ -75,22 +76,11 @@ class Dispatcher extends \DNRoot {
 	 */
 	public function Data($metricID) {
 
-		$environmentName = $this->urlParams['Environment'];
 		$metric = \Metric::get_by_id('Metric', $metricID);
 		$project = $this->getCurrentProject();
 
 		// If we are on the metrics root page, grab prod data
-		if (is_null($environmentName)) {
-			$env = $project->DNEnvironmentList()
-					->filter('Usage', 'Production')
-					->First();
-
-			if (! $env) {
-				$env = $project->DNEnvironmentList()
-						->filter('Usage', 'UAT')
-						->First();
-			}
-		}
+		$env = $this->getCurrentEnvironment($project);
 		
 		return $metric->query($env->RFCluster, $env->RFStack, $env->RFEnvironment);
 
