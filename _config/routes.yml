@@ -1,8 +1,0 @@
----
-Name: rainforestmetricsroutes
-After:
-  - '#deploynautroutes'
----
-Director:
-  rules:
-    'naut/project//$Project/metrics': 'MetricsController'

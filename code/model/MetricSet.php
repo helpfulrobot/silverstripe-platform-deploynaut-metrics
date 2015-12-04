@@ -4,10 +4,15 @@ class MetricSet extends DataObject {
 
 	private static $db = array(
 		'Name' => 'Varchar(100)',
+		'Enabled' => 'Boolean'
 	);
 
 	private static $many_many = array(
 		'Metrics' => 'Metric'
+	);
+
+	private static $defaults = array(
+		'Enabled' => true
 	);
 
 	public function getCMSFields() {
