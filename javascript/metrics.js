@@ -1,10 +1,5 @@
 var charts = [];
 
-console.log("hello");
-
-
-
-
 $(document).ready(function() {
     $('[data-metric]').each(function(i) {
       var cols = [];
@@ -13,7 +8,6 @@ $(document).ready(function() {
         data.unshift(query.name);
         cols.push(data);
       });
-      console.log(cols);
         charts[i] = c3.generate({
             bindto: this,
             data: {
