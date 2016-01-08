@@ -13,7 +13,7 @@ class Dispatcher extends \DNRoot {
 	const ACTION_METRICS = 'metrics';
 
 	public static $allowed_actions = array(
-		'viewmetrics'
+		'viewmetrics',
 	);
 
 	public function init() {
@@ -26,6 +26,14 @@ class Dispatcher extends \DNRoot {
 
 		if (! $project->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ)) {
 			return \Security::permissionFailure();
+		}
+
+		$response = NULL;
+		if (isset($_GET)) {
+			$var = \Convert::raw2xml(array_keys($_GET)[1]);
+			// var_dump($var);
+			//
+			// die();
 		}
 	}
 
@@ -83,9 +91,11 @@ class Dispatcher extends \DNRoot {
 
 		// If we are on the metrics root page, grab prod data
 		$env = $this->getCurrentEnvironment($project);
-		
+
 		return $metric->query($env->RFCluster, $env->RFStack, $env->RFEnvironment);
 
 	}
+
+
 
 }
