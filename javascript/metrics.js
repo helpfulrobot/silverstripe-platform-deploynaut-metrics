@@ -5,12 +5,14 @@ $(document).ready(function() {
         charts[i] = c3.generate({
             bindto: this,
             data: {
+							data: {
                 x: 'x',
                 columns: $(this).data('points'),
                 types: {
                     sum: 'bar'
                 }
-							},
+							}
+						},
 						color: {
 								pattern: ['#3AAEF9', '#303E4D']
 						},

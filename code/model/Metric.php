@@ -25,7 +25,6 @@ class Metric extends DataObject {
 
             $parsedString .= '&target=' . $target;
         }
-
         return $parsedString;
     }
 
@@ -48,29 +47,34 @@ class Metric extends DataObject {
 
         $url .= $this->parse($cluster, $stack, $environment);
 
-        // echo $url; die; dd('test');
-
         $client = new GuzzleHttp\Client();
         $request = $client->get($url);
 
         $data = $request->json();
-        // dd($data);
+        // var_dump($data);
+				$allmetrics = [];
 
-        $target = substr($data[0]['target'], 0, 3);
-        //add target to metrics array
-        $metrics = array($target);
-        $timestamps = array('x');
-        //get amount of datapoints to use in loop
-        $ilimit = count($data[0]['datapoints']);
-        //loop through datapoints and add to metrics array
-        for($i = 0; $i < $ilimit; $i++) {
-            $metrics[] = $data[0]['datapoints'][$i][0];
-            $timestamps[] = $data[0]['datapoints'][$i][1];
-        }
+				foreach ($data as $data) {
 
+					$target = $data['target'];
+        	//add target to metrics array
+        	$metrics = array($target);
+
+        	$timestamps = array('x');
+        	//get amount of datapoints to use in loop
+        	$ilimit = count($data['datapoints']);
+        	//loop through datapoints and add to metrics array
+        	for($i = 0; $i < $ilimit; $i++) {
+            $metrics[] = $data['datapoints'][$i][0];
+            $timestamps[] = $data['datapoints'][$i][1];
+        	}
+
+					array_push($allmetrics, [$timestamps, $metrics]);
+				}
         // dd($timestamps);
-
-        return json_encode([$timestamps, $metrics]);
+				var_dump($allmetrics);
+				// die();
+        return json_encode($allmetrics);
     }
 
 }
