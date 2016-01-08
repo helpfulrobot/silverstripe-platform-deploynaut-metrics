@@ -2,15 +2,15 @@
 
 class Metric extends DataObject {
 
-	private static $db = array(
-		'Name' => 'Varchar(100)',
-    'Description' => 'Text',
-		'Query' => 'Varchar(1000)',
-	);
+    private static $db = array(
+        'Name' => 'Varchar(100)',
+        'Description' => 'Text',
+        'Query' => 'Varchar(1000)',
+    );
 
-	private static $belongs_many_many = array(
-		'MetricSets' => 'MetricSet'
-	);
+    private static $belongs_many_many = array(
+        'MetricSets' => 'MetricSet'
+    );
 
     public function parse($cluster, $stack, $environment) {
         $parsedString = '';
@@ -30,7 +30,7 @@ class Metric extends DataObject {
 
     /**
      * Makes a query to Graphite and returns formatted data
-     * 
+     *
      * @param  string $cluster     The cluster the environment is in
      * @param  string $stack       The stack the environment is in
      * @param  string $environment The environment
@@ -39,6 +39,7 @@ class Metric extends DataObject {
      * @return string              JASON-formatted metrics
      * @todo   Make this code less trashy
      * @todo   Handle failed API calls to Graphite gracefully
+     * @todo   Extract into a service
      */
     public function query($cluster, $stack, $environment, $startTime = '-1hour', $endTime = 'now') {
         $url = 'http://metrics.platform.silverstripe.com/render?format=json';
@@ -57,30 +58,36 @@ class Metric extends DataObject {
         $request = $client->get($url);
 
         $data = $request->json();
-        // var_dump($data);
-				$allmetrics = [];
+        $final = array();
+        $timestamps = array();
 
-				foreach ($data as $data) {
+        foreach ($data as $q => $query) {
+            $points = array();
 
-					$target = $data['target'];
-        	//add target to metrics array
-        	$metrics = array($target);
+            //loop through datapoints and add to metrics array
+            for ($i = 0; $i < count($query['datapoints']); $i++) {
+                $points[] = $query['datapoints'][$i][0];
 
-        	$timestamps = array('x');
-        	//get amount of datapoints to use in loop
-        	$ilimit = count($data['datapoints']);
-        	//loop through datapoints and add to metrics array
-        	for($i = 0; $i < $ilimit; $i++) {
-            $metrics[] = $data['datapoints'][$i][0];
-            $timestamps[] = $data['datapoints'][$i][1];
-        	}
+                // Grab timestamps from first query
+                if ($q == 0) {
+                    $timestamps[] = $query['datapoints'][$i][1];
+                }
+            }
 
-					array_push($allmetrics, [$timestamps, $metrics]);
-				}
-        // dd($timestamps);
-				var_dump($allmetrics);
-				// die();
-        return json_encode($allmetrics);
+            array_push($final, array(
+                'name' => $query['target'],
+                'color' => '',
+                'data' => $points
+            ));
+        }
+
+        // Add timestamps
+        array_push($final, array(
+            'name' => 'x',
+            'data' => $timestamps
+        ));
+
+        return json_encode($final);
     }
 
 }
