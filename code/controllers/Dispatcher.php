@@ -28,13 +28,6 @@ class Dispatcher extends \DNRoot {
 			return \Security::permissionFailure();
 		}
 
-		$response = NULL;
-		if (isset($_GET)) {
-			$var = \Convert::raw2xml(array_keys($_GET)[1]);
-			// var_dump($var);
-			//
-			// die();
-		}
 	}
 
 	public function index(\SS_HTTPRequest $request) {
@@ -48,6 +41,15 @@ class Dispatcher extends \DNRoot {
 		$env = $this->getCurrentEnvironment($project);
 		if (! $env) {
 			return $this->environment404Response();
+		}
+
+		$ago = intval($request->getVar("timeago"));
+		if (is_numeric($ago) && in_array($ago, array(1, 2, 4, 8, 12, 24, 48))) {
+			var_dump($ago);
+			die();
+		} else {
+			var_dump("sad trombone");
+			die();
 		}
 
 		return $this->customise(array(
