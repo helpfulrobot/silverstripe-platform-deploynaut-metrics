@@ -11,6 +11,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-		"silverstripe/deploynaut": "dev-master"
+		"silverstripe/deploynaut": "dev-master",
+        "guzzle/guzzle": "~3.9"
 	}
 }

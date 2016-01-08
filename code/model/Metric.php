@@ -30,13 +30,15 @@ class Metric extends DataObject {
 
     /**
      * Makes a query to Graphite and returns formatted data
+     * 
      * @param  string $cluster     The cluster the environment is in
      * @param  string $stack       The stack the environment is in
      * @param  string $environment The environment
      * @param  string $startTime   Either relative (-1hour, etc.) or absolute (12:59_20151003)
      * @param  string $endTime     Either relative (-1hour, etc.) or absolute (12:59_20151003)
-     * @return [type]              [description]
+     * @return string              JASON-formatted metrics
      * @todo   Make this code less trashy
+     * @todo   Handle failed API calls to Graphite gracefully
      */
     public function query($cluster, $stack, $environment, $startTime = '-1hour', $endTime = 'now') {
         $url = 'http://metrics.platform.silverstripe.com/render?format=json';
@@ -47,7 +49,11 @@ class Metric extends DataObject {
 
         $url .= $this->parse($cluster, $stack, $environment);
 
-        $client = new GuzzleHttp\Client();
+        $client = new GuzzleHttp\Client([
+            'timeout' => 5,
+            'connect_timeout' => 1
+        ]);
+
         $request = $client->get($url);
 
         $data = $request->json();
