@@ -9,6 +9,7 @@
 </div>
 
 <div class="content">
+    $Range
     <div class="metric-set">
         <div class="metrics">
         <% loop $Metrics %>

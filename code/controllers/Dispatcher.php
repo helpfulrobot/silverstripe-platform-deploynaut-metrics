@@ -14,6 +14,7 @@ class Dispatcher extends \DNRoot {
 
 	public static $allowed_actions = array(
 		'viewmetrics',
+		'Range',
 	);
 
 	public function init() {
@@ -46,11 +47,14 @@ class Dispatcher extends \DNRoot {
 		$ago = intval($request->getVar("timeago"));
 		if (is_numeric($ago) && in_array($ago, array(1, 2, 4, 8, 12, 24, 48))) {
 			var_dump($ago);
-			die();
+			// die();
 		} else {
 			var_dump("sad trombone");
-			die();
+			// die();
 		}
+		var_dump(\Director::baseURL() . $request->getURL() . "?timeago=" . $ago);
+		// var_dump($this);
+		// die();
 
 		return $this->customise(array(
 			'Environment' => $env,
@@ -79,6 +83,26 @@ class Dispatcher extends \DNRoot {
 		))->first();
 
 		return $metricSet;
+	}
+
+	public function Range() {
+
+		$form = \Form::create(
+			$this,
+			'Range',
+			\FieldList::create(
+				\DropdownField::create('TimeAgo', 'Hours of graphs to display', array(1, 2, 4, 8, 12, 24, 48))),
+			\FieldList::create(
+				\FormAction::create('setRange', 'Set range')),
+			\RequiredFields::create('TimeAgo')
+		);
+
+		return $form;
+	}
+
+	public function setRange($data, $form) {
+		// die("got to the function");
+		return $this->redirect(\Director::baseURL() .  "?timeago=" . $data['TimeAgo']);
 	}
 
 	/**
