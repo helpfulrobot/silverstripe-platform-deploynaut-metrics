@@ -9,6 +9,11 @@
 </div>
 
 <div class="content">
+
+    <div id="setRange">
+        <h3>$Range.Title</h3>
+        <a class="btn btn-primary">Set Range</a>
+    </div>
     $Range
     <div class="metric-set">
         <div class="metrics">
@@ -33,3 +38,4 @@
 <% require javascript('deploynaut-rainforest-metrics/javascript/vendor/d3.min.js') %>
 <% require javascript('deploynaut-rainforest-metrics/javascript/vendor/c3.min.js') %>
 <% require javascript('deploynaut-rainforest-metrics/javascript/metrics.js') %>
+<% require javascript('deploynaut-rainforest-metrics/javascript/timepicker.js') %>

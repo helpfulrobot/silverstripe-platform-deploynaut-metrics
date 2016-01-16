@@ -6,3 +6,13 @@
 .c3-selected-circle {
   stroke-width: 16px;
 }
+
+#setRange > h3 {
+  display: inline-block;
+}
+
+#setRange > a {
+  display: inline-block;
+  float: right;
+  margin-top: 20px;
+}

@@ -14,7 +14,6 @@ class Dispatcher extends \DNRoot {
 
 	public static $allowed_actions = array(
 		'viewmetrics',
-		'Range',
 	);
 
 	public function init() {
@@ -43,18 +42,6 @@ class Dispatcher extends \DNRoot {
 		if (! $env) {
 			return $this->environment404Response();
 		}
-
-		$ago = intval($request->getVar("timeago"));
-		if (is_numeric($ago) && in_array($ago, array(1, 2, 4, 8, 12, 24, 48))) {
-			var_dump($ago);
-			// die();
-		} else {
-			var_dump("sad trombone");
-			// die();
-		}
-		var_dump(\Director::baseURL() . $request->getURL() . "?timeago=" . $ago);
-		// var_dump($this);
-		// die();
 
 		return $this->customise(array(
 			'Environment' => $env,
@@ -87,22 +74,9 @@ class Dispatcher extends \DNRoot {
 
 	public function Range() {
 
-		$form = \Form::create(
-			$this,
-			'Range',
-			\FieldList::create(
-				\DropdownField::create('TimeAgo', 'Hours of graphs to display', array(1, 2, 4, 8, 12, 24, 48))),
-			\FieldList::create(
-				\FormAction::create('setRange', 'Set range')),
-			\RequiredFields::create('TimeAgo')
-		);
+		$form = \DropdownField::create('TimeAgo', 'Hours of graphs to display', array(1, 2, 4, 8, 12, 24, 48));
 
-		return $form;
-	}
-
-	public function setRange($data, $form) {
-		// die("got to the function");
-		return $this->redirect(\Director::baseURL() .  "?timeago=" . $data['TimeAgo']);
+		return $form->setEmptyString('Select a value...');
 	}
 
 	/**
@@ -112,13 +86,19 @@ class Dispatcher extends \DNRoot {
 	 */
 	public function Data($metricID) {
 
+		$ago = intval($this->getRequest()->getVar("timeago"));
+		if (!is_numeric($ago) || !in_array($ago, array(1, 2, 4, 8, 12, 24, 48))) {
+			$ago = 1;
+		}
+
+		$startTime = "-" . $ago . "hour";
 		$metric = \Metric::get_by_id('Metric', $metricID);
 		$project = $this->getCurrentProject();
 
 		// If we are on the metrics root page, grab prod data
 		$env = $this->getCurrentEnvironment($project);
 
-		return $metric->query($env->RFCluster, $env->RFStack, $env->RFEnvironment);
+		return $metric->query($env->RFCluster, $env->RFStack, $env->RFEnvironment, $startTime);
 
 	}
 
