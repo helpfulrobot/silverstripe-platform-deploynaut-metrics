@@ -10,11 +10,17 @@
 
 <div class="content">
 
-    <div id="setRange">
-        <h3>$Range.Title</h3>
-        <a class="btn btn-primary">Set Range</a>
+    <div id="rangeheader">
+        <div id="rangedropdown">
+            <div id="picker">$Range</div>
+            <a class="btn btn-primary">
+                <i class="fa fa-clock-o">
+                </i>
+             Set Range
+            </a>
+        </div>
     </div>
-    $Range
+
     <div class="metric-set">
         <div class="metrics">
         <% loop $Metrics %>
