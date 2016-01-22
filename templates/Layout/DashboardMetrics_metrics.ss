@@ -9,6 +9,18 @@
 </div>
 
 <div class="content">
+
+    <div id="rangeheader">
+        <div id="rangedropdown">
+            <div id="picker">$Range</div>
+            <a class="btn btn-primary">
+                <i class="fa fa-clock-o">
+                </i>
+             Set Range
+            </a>
+        </div>
+    </div>
+
     <div class="metric-set">
         <div class="metrics">
         <% loop $Metrics %>
@@ -32,3 +44,4 @@
 <% require javascript('deploynaut-rainforest-metrics/javascript/vendor/d3.min.js') %>
 <% require javascript('deploynaut-rainforest-metrics/javascript/vendor/c3.min.js') %>
 <% require javascript('deploynaut-rainforest-metrics/javascript/metrics.js') %>
+<% require javascript('deploynaut-rainforest-metrics/javascript/timepicker.js') %>

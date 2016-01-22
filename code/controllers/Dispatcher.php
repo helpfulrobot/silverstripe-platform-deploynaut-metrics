@@ -13,7 +13,7 @@ class Dispatcher extends \DNRoot {
 	const ACTION_METRICS = 'metrics';
 
 	public static $allowed_actions = array(
-		'viewmetrics'
+		'viewmetrics',
 	);
 
 	public function init() {
@@ -27,6 +27,7 @@ class Dispatcher extends \DNRoot {
 		if (! $project->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ)) {
 			return \Security::permissionFailure();
 		}
+
 	}
 
 	public function index(\SS_HTTPRequest $request) {
@@ -71,6 +72,28 @@ class Dispatcher extends \DNRoot {
 		return $metricSet;
 	}
 
+	public function Range() {
+
+		$values = array(
+			1 => "1 hour ago",
+			2 => "2 hours ago",
+			4 => "4 hours ago",
+			8 => "8 hours ago",
+			12 => "12 hours ago",
+			24 => "24 hours ago",
+			48 => "48 hours ago",
+		);
+
+		if (intval($this->getRequest()->getVar("timeago"))) {
+			$currentvalue = (intval($this->getRequest()->getVar("timeago")));
+			$form = \DropdownField::create('TimeAgo', 'Hours of graphs to display', $values,
+			$currentvalue);
+		} else {
+			$form = \DropdownField::create('TimeAgo', 'Hours of graphs to display', $values);
+		}
+		return $form;
+	}
+
 	/**
 	 * Output current data for a given metric
 	 * @param Metric $metric The metric to return data for
@@ -78,14 +101,22 @@ class Dispatcher extends \DNRoot {
 	 */
 	public function Data($metricID) {
 
+		$ago = intval($this->getRequest()->getVar("timeago"));
+		if (!is_numeric($ago) || !in_array($ago, array(1, 2, 4, 8, 12, 24, 48))) {
+			$ago = 1;
+		}
+
+		$startTime = "-" . $ago . "hour";
 		$metric = \Metric::get_by_id('Metric', $metricID);
 		$project = $this->getCurrentProject();
 
 		// If we are on the metrics root page, grab prod data
 		$env = $this->getCurrentEnvironment($project);
-		
-		return $metric->query($env->RFCluster, $env->RFStack, $env->RFEnvironment);
+
+		return $metric->query($env->RFCluster, $env->RFStack, $env->RFEnvironment, $startTime);
 
 	}
+
+
 
 }

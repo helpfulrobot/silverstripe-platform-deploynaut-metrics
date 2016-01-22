@@ -6,3 +6,25 @@
 .c3-selected-circle {
   stroke-width: 16px;
 }
+
+#rangeheader > h3 {
+  display: inline-block;
+}
+
+#rangeheader > a {
+  display: inline-block;
+  margin-top: 20px;
+}
+
+#rangedropdown {
+  display: inline-block;
+  float: right;
+
+}
+
+#picker {
+  margin-right: 1em;
+  display: inline-block;
+  vertical-align: top;
+
+}
