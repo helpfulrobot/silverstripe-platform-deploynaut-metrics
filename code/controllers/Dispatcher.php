@@ -20,11 +20,11 @@ class Dispatcher extends \DNRoot {
 		parent::init();
 
 		$project = $this->getCurrentProject();
-		if (! $project) {
+		if (! $project ) {
 			return $this->project404Response();
 		}
 
-		if (! $project->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ)) {
+		if (! $project->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ) || ! $project->ShowMetrics) {
 			return \Security::permissionFailure();
 		}
 
@@ -65,11 +65,7 @@ class Dispatcher extends \DNRoot {
 	public function MetricSet() {
 		// TODO: Check if there's an alternative default for this project
 
-		$metricSet = \MetricSet::get()->filter(array(
-			'Enabled' => true
-		))->first();
-
-		return $metricSet;
+		return (\MetricSet::get()->byID($this->getCurrentEnvironment()->MetricSetID));
 	}
 
 	public function Range() {

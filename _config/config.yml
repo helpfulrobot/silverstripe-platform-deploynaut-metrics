@@ -6,6 +6,7 @@ After:
 DNEnvironment:
   extensions:
     - 'DashboardMetrics\MenuExtension'
+    - 'DashboardMetrics\EnvironmentMetricsExtension'
 Director:
   rules:
     'naut/project/$Project/environment/$Environment/metrics': 'DashboardMetrics\Dispatcher',

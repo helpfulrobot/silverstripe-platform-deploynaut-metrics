@@ -11,7 +11,8 @@ class MenuExtension extends \DataExtension {
 	 */
 	public function updateMenu(\ArrayList $list) {
 		if (!$this->owner->Backend()->config()->supports_dashboard_metrics) return;
-		if(!$this->owner->Project()->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ)) return;
+		if (!$this->owner->Project()->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ)) return;
+		if (!$this->owner->ShowMetrics) return;
 
 		$controller = \Controller::curr();
 		$actionType = $controller->getField('CurrentActionType');
