@@ -17,6 +17,7 @@ class Dispatcher extends \DNRoot {
 	);
 
 	public function init() {
+
 		parent::init();
 
 		$project = $this->getCurrentProject();
@@ -24,7 +25,7 @@ class Dispatcher extends \DNRoot {
 			return $this->project404Response();
 		}
 
-		if (! $project->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ) || ! $project->ShowMetrics) {
+		if (! $project->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ)) {
 			return \Security::permissionFailure();
 		}
 
@@ -41,6 +42,8 @@ class Dispatcher extends \DNRoot {
 		$env = $this->getCurrentEnvironment($project);
 		if (! $env) {
 			return $this->environment404Response();
+		} else if (! $env->ShowMetrics) {
+			return \Security::permissionFailure();
 		}
 
 		return $this->customise(array(
