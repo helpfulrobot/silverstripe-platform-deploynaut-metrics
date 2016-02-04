@@ -7,6 +7,10 @@ class MetricSet extends DataObject {
 		'Enabled' => 'Boolean'
 	);
 
+	private static $has_many = array(
+		'Environments' => 'DNEnvironment',
+	);
+
 	private static $many_many = array(
 		'Metrics' => 'Metric'
 	);
