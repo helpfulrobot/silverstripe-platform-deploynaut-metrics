@@ -47,6 +47,7 @@ class Metric extends DataObject {
         // Timestamps
         $url .= '&from=' . $startTime;
         $url .= '&until=' . $endTime;
+        $url .= '&maxDataPoints=60';
 
         $url .= $this->parse($cluster, $stack, $environment);
 
