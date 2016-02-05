@@ -27,7 +27,6 @@
             <h3>$Name</h3>
             <div class="metrics">
                 <div class="metric">
-                    <h5>$Name</h5>
                     <div height="200" class="chart requests" data-metric data-display="$ChartType" data-points='$Up.getData($ID)'></div>
                     <p>$Description</p>
                 </div>
