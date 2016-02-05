@@ -3,7 +3,13 @@ Dashboard Metrics Module
 
 This module is designed to integrated Graphite and Deploynaut to surface some server metrics to the client.
 
-First, define the metric, then add it to a metric set. Then you can assign a metric set to an environment and enable the ability to see the metrics. 
+First, you'll need to add an `_ss_environment.php` variable like so:
+
+```
+define('DEPLOYNAUT_METRICS_GRAPHITE_URL', 'http://metrics.platform.silverstripe.com');
+```
+
+Then, define the metric through model admin. You can then define a metric set by adding metrics to it. Assign a metric set to an environment and enable the ability to see the metrics, and there you go!
 
 Here are some default queries to add in:
 
