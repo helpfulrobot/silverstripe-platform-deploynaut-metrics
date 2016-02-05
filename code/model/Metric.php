@@ -70,7 +70,7 @@ class Metric extends \DataObject {
      */
     public function query($cluster, $stack, $environment, $startTime = '-1hour', $endTime = 'now', $maxDataPoints = 120) {
         if ($this->config()->graphite_url == '') {
-            SS_Log::log('Metrics Configuration Failure: Missing graphite_url', SS_Log::ERR);
+            \SS_Log::log('Metrics Configuration Failure: Missing graphite_url', \SS_Log::ERR);
             return json_encode([]);
         }
 
@@ -93,11 +93,11 @@ class Metric extends \DataObject {
             $data = $request->json();
         } catch (GuzzleCurlException $e) {
             // Something went wrong with the request (probably no access to the Graphite server?)
-            SS_Log::log('Metrics Request Failure: '. $e->getMessage(), SS_Log::WARN);
+            \SS_Log::log('Metrics Request Failure: '. $e->getMessage(), \SS_Log::WARN);
             return json_encode([]);
         } catch (GuzzleServerException $e) {
             // Graphite threw a hissy fit (probably malformed query)
-            SS_Log::log('Metrics Query Failure: '. $e->getMessage(), SS_Log::WARN);
+            \SS_Log::log('Metrics Query Failure: '. $e->getMessage(), \SS_Log::WARN);
             return json_encode([]);
         }
 
