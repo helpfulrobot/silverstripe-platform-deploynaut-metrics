@@ -22,12 +22,12 @@ class Metric extends DataObject {
 
     /**
      * Replaces query variables with Environment data
-     * 
+     *
      * @param  string $cluster     The cluster the environment is in
      * @param  string $stack       The stack the environment is in
      * @param  string $environment The name of the environment
      * @return string              A query string with the C/S/E added
-     * 
+     *
      * @todo   Utilise grammar parsing to make this more flexible
      */
     public function parse($cluster, $stack, $environment) {
@@ -56,7 +56,7 @@ class Metric extends DataObject {
      * @param  string $endTime       Either relative (-1hour, etc.) or absolute (12:59_20151003)
      * @param  int    $maxDataPoints The maximum number of datapoints that should be returned.
      * @return string                JSON-formatted metric data
-     * 
+     *
      * @todo   Return intelligent error information on failures instead of a blank JSON array
      * @todo   Extract into a service
      */
@@ -95,27 +95,27 @@ class Metric extends DataObject {
             $points = array();
 
             //loop through datapoints and add to metrics array
-            for ($i = 0; $i < count($query['datapoints']); $i++) {
-                $points[] = $query['datapoints'][$i][0];
+            foreach ($query['datapoints'] as $point) {
+                $points[] = $point[0];
 
                 // Grab timestamps from first query
                 if ($q == 0) {
-                    $timestamps[] = $query['datapoints'][$i][1];
+                    $timestamps[] = $point[1];
                 }
             }
 
-            array_push($final, array(
+            $final[] = array(
                 'name' => $query['target'],
                 'color' => '',
                 'data' => $points
-            ));
+            );
         }
 
         // Add timestamps
-        array_push($final, array(
+        $final[] = array(
             'name' => 'x',
             'data' => $timestamps
-        ));
+        );
 
         return json_encode($final);
     }
