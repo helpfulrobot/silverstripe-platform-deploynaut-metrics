@@ -8,9 +8,20 @@ namespace DashboardMetrics;
  * @package  deploynaut-rainforest-metrics
  * @author  Garion Herman <garion@silverstripe.com>
  */
-class MetricsController extends \DNRoot {
+class MetricsController extends \DNRoot implements \PermissionProvider {
 
 	const ACTION_METRICS = 'metrics';
+
+	const ALLOW_ENVIRONMENT_METRICS_READ = 'ALLOW_ENVIRONMENT_METRICS_READ';
+
+	public function providePermissions() {
+		return array(
+			ALLOW_ENVIRONMENT_METRICS_READ => array(
+				'name' => "Read access to environment metrics",
+				'category' => "Deploynaut",
+			)
+		);
+	}
 
 	public static $allowed_actions = array(
 		'viewmetrics',
@@ -25,7 +36,7 @@ class MetricsController extends \DNRoot {
 			return $this->project404Response();
 		}
 
-		if (! $project->allowed(Permissions::ALLOW_ENVIRONMENT_METRICS_READ)) {
+		if (! $project->allowed(self::ALLOW_ENVIRONMENT_METRICS_READ)) {
 			return \Security::permissionFailure();
 		}
 
