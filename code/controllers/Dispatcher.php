@@ -71,6 +71,10 @@ class Dispatcher extends \DNRoot {
 		return (\MetricSet::get()->byID($this->getCurrentEnvironment()->MetricSetID));
 	}
 
+	/**
+	 * Sets Range for graphs to diplay via dropdown.
+	 * @return DropdownField   The timepicker
+	 */
 	public function Range() {
 
 		$values = array(
