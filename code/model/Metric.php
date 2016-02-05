@@ -20,6 +20,8 @@ class Metric extends DataObject {
         'MetricSets' => 'MetricSet'
     );
 
+    private static $graphite_url = '';
+
     /**
      * Replaces query variables with Environment data
      * 
@@ -61,7 +63,12 @@ class Metric extends DataObject {
      * @todo   Extract into a service
      */
     public function query($cluster, $stack, $environment, $startTime = '-1hour', $endTime = 'now', $maxDataPoints = 120) {
-        $url = 'http://metrics.platform.silverstripe.com/render?format=json';
+        if ($this->config()->graphite_url == '') {
+            SS_Log::log('Metrics Configuration Failure: Missing graphite_url', SS_Log::ERR);
+            return json_encode([]);
+        }
+
+		$url = $this->config()->graphite_url . '/render?format=json';
 
         // Timestamps & Granularity
         $url .= '&from=' . $startTime;
