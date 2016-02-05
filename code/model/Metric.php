@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Metric current serves two purposes:
+ *  - Defines the model for individual metrics
+ *  - Performs queries to Graphite
+ *
+ * This needs to be refactored to extract the API interactions
+ * into a Service, but will serve purpose for MVP.
+ */
 class Metric extends DataObject {
 
     private static $db = array(
@@ -12,6 +20,16 @@ class Metric extends DataObject {
         'MetricSets' => 'MetricSet'
     );
 
+    /**
+     * Replaces query variables with Environment data
+     * 
+     * @param  string $cluster     The cluster the environment is in
+     * @param  string $stack       The stack the environment is in
+     * @param  string $environment The name of the environment
+     * @return string              A query string with the C/S/E added
+     * 
+     * @todo   Utilise grammar parsing to make this more flexible
+     */
     public function parse($cluster, $stack, $environment) {
         $parsedString = '';
 
@@ -31,23 +49,24 @@ class Metric extends DataObject {
     /**
      * Makes a query to Graphite and returns formatted data
      *
-     * @param  string $cluster     The cluster the environment is in
-     * @param  string $stack       The stack the environment is in
-     * @param  string $environment The environment
-     * @param  string $startTime   Either relative (-1hour, etc.) or absolute (12:59_20151003)
-     * @param  string $endTime     Either relative (-1hour, etc.) or absolute (12:59_20151003)
-     * @return string              JASON-formatted metrics
-     * @todo   Make this code less trashy
-     * @todo   Handle failed API calls to Graphite gracefully
+     * @param  string $cluster       The cluster the environment is in
+     * @param  string $stack         The stack the environment is in
+     * @param  string $environment   The environment
+     * @param  string $startTime     Either relative (-1hour, etc.) or absolute (12:59_20151003)
+     * @param  string $endTime       Either relative (-1hour, etc.) or absolute (12:59_20151003)
+     * @param  int    $maxDataPoints The maximum number of datapoints that should be returned.
+     * @return string                JSON-formatted metric data
+     * 
+     * @todo   Return intelligent error information on failures instead of a blank JSON array
      * @todo   Extract into a service
      */
-    public function query($cluster, $stack, $environment, $startTime = '-1hour', $endTime = 'now') {
+    public function query($cluster, $stack, $environment, $startTime = '-1hour', $endTime = 'now', $maxDataPoints = 120) {
         $url = 'http://metrics.platform.silverstripe.com/render?format=json';
 
-        // Timestamps
+        // Timestamps & Granularity
         $url .= '&from=' . $startTime;
         $url .= '&until=' . $endTime;
-        $url .= '&maxDataPoints=60';
+        $url .= '&maxDataPoints=' . $maxDataPoints;
 
         $url .= $this->parse($cluster, $stack, $environment);
 
@@ -56,9 +75,19 @@ class Metric extends DataObject {
             'connect_timeout' => 1
         ]);
 
-        $request = $client->get($url);
+        try {
+            $request = $client->get($url);
+            $data = $request->json();
+        } catch (GuzzleHttp\Exception\CurlException $e) {
+            // Something went wrong with the request (probably no access to the Graphite server?)
+            SS_Log::log('Metrics Request Failure: '. $e->getMessage(), SS_Log::WARN);
+            return json_encode([]);
+        } catch (GuzzleHttp\Exception\ServerException $e) {
+            // Graphite threw a hissy fit (probably malformed query)
+            SS_Log::log('Metrics Query Failure: '. $e->getMessage(), SS_Log::WARN);
+            return json_encode([]);
+        }
 
-        $data = $request->json();
         $final = array();
         $timestamps = array();
 
