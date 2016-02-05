@@ -71,7 +71,7 @@ class Dispatcher extends \DNRoot {
 		return (\MetricSet::get()->byID($this->getCurrentEnvironment()->MetricSetID));
 	}
 
-	public function Range() {
+	public function getRange() {
 
 		$values = array(
 			1 => "1 hour ago",
