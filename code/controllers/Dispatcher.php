@@ -85,12 +85,20 @@ class Dispatcher extends \DNRoot {
 
 		if (intval($this->getRequest()->getVar("timeago"))) {
 			$currentvalue = (intval($this->getRequest()->getVar("timeago")));
-			$form = \DropdownField::create('TimeAgo', 'Hours of graphs to display', $values,
-			$currentvalue);
+			$field = \DropdownField::create(
+				'TimeAgo',
+				'Hours of graphs to display',
+				$values,
+				$currentvalue
+			);
 		} else {
-			$form = \DropdownField::create('TimeAgo', 'Hours of graphs to display', $values);
+			$field = \DropdownField::create(
+				'TimeAgo',
+				'Hours of graphs to display',
+				$values
+			);
 		}
-		return $form;
+		return $field;
 	}
 
 	/**
