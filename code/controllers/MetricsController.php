@@ -73,8 +73,11 @@ class MetricsController extends \DNRoot {
 
 	}
 
+	/**
+	 * Sets Range for graphs to diplay via dropdown.
+	 * @return DropdownField   The timepicker
+	 */
 	public function getRange() {
-
 		$values = array(
 			1 => "1 hour ago",
 			2 => "2 hours ago",
