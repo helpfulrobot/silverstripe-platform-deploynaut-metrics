@@ -1,6 +1,8 @@
 <?php
 
-class MetricSet extends DataObject {
+namespace DashboardMetrics;
+
+class MetricSet extends \DataObject {
 
 	private static $db = array(
 		'Name' => 'Varchar(100)',
@@ -12,7 +14,7 @@ class MetricSet extends DataObject {
 	);
 
 	private static $many_many = array(
-		'Metrics' => 'Metric'
+		'Metrics' => 'DashboardMetrics\Metric'
 	);
 
 	private static $defaults = array(
@@ -28,7 +30,7 @@ class MetricSet extends DataObject {
 			$metricsMap[$metric->ID] = $metric->Name;
 		}
 
-		$metricsField = ListboxField::create('Metrics', 'Metrics')
+		$metricsField = \ListboxField::create('Metrics', 'Metrics')
 			->setMultiple(true)
 			->setSource($metricsMap);
 

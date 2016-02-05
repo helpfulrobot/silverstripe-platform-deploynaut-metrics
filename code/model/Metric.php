@@ -1,5 +1,11 @@
 <?php
 
+namespace DashboardMetrics;
+
+use \GuzzleHttp\Client as GuzzleClient;
+use \GuzzleHttp\Exception\CurlException as GuzzleCurlException;
+use \GuzzleHttp\Exception\ServerException as GuzzleServerException;
+
 /**
  * Metric current serves two purposes:
  *  - Defines the model for individual metrics
@@ -8,7 +14,7 @@
  * This needs to be refactored to extract the API interactions
  * into a Service, but will serve purpose for MVP.
  */
-class Metric extends DataObject {
+class Metric extends \DataObject {
 
     private static $db = array(
         'Name' => 'Varchar(100)',
@@ -17,7 +23,7 @@ class Metric extends DataObject {
     );
 
     private static $belongs_many_many = array(
-        'MetricSets' => 'MetricSet'
+        'MetricSets' => 'DashboardMetrics\MetricSet'
     );
 
     private static $graphite_url = '';
@@ -77,7 +83,7 @@ class Metric extends DataObject {
 
         $url .= $this->parse($cluster, $stack, $environment);
 
-        $client = new GuzzleHttp\Client([
+        $client = new GuzzleClient([
             'timeout' => 5,
             'connect_timeout' => 1
         ]);
@@ -85,11 +91,11 @@ class Metric extends DataObject {
         try {
             $request = $client->get($url);
             $data = $request->json();
-        } catch (GuzzleHttp\Exception\CurlException $e) {
+        } catch (GuzzleCurlException $e) {
             // Something went wrong with the request (probably no access to the Graphite server?)
             SS_Log::log('Metrics Request Failure: '. $e->getMessage(), SS_Log::WARN);
             return json_encode([]);
-        } catch (GuzzleHttp\Exception\ServerException $e) {
+        } catch (GuzzleServerException $e) {
             // Graphite threw a hissy fit (probably malformed query)
             SS_Log::log('Metrics Query Failure: '. $e->getMessage(), SS_Log::WARN);
             return json_encode([]);

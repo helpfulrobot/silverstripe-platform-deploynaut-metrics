@@ -9,4 +9,4 @@ DNEnvironment:
     - 'DashboardMetrics\EnvironmentMetricsExtension'
 Director:
   rules:
-    'naut/project/$Project/environment/$Environment/metrics': 'DashboardMetrics\Dispatcher',
+    'naut/project/$Project/environment/$Environment/metrics': 'DashboardMetrics\MetricsController',

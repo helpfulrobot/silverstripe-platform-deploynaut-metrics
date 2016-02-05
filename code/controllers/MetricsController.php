@@ -8,7 +8,7 @@ namespace DashboardMetrics;
  * @package  deploynaut-rainforest-metrics
  * @author  Garion Herman <garion@silverstripe.com>
  */
-class Dispatcher extends \DNRoot {
+class MetricsController extends \DNRoot {
 
 	const ACTION_METRICS = 'metrics';
 
@@ -45,7 +45,15 @@ class Dispatcher extends \DNRoot {
 		} else if (! $env->ShowMetrics) {
 			return \Security::permissionFailure();
 		}
-		$metrics = \MetricSet::get()->byID($this->getCurrentEnvironment()->MetricSetID)->metrics();
+		$metricset = MetricSet::get()->byID($this->getCurrentEnvironment()->MetricSetID);
+
+		// Check for metrics actually being defined for env
+		if (!$metricset || $metricset == NULL) {
+			$metrics = false;
+		} else {
+			$metrics = $metricset->metrics();
+		}
+
 		return $this->customise(array(
 			'Environment' => $env,
 			'Metrics' => $metrics
@@ -97,7 +105,7 @@ class Dispatcher extends \DNRoot {
 
 	/**
 	 * Output current data for a given metric
-	 * @param Metric $metric The metric to return data for
+	 * @param int $metric The metric to return data for
 	 * @todo  Clean this up _significantly_
 	 */
 	public function getData($metricID) {
@@ -108,16 +116,12 @@ class Dispatcher extends \DNRoot {
 		}
 
 		$startTime = "-" . $ago . "hour";
-		$metric = \Metric::get_by_id('Metric', $metricID);
+		$metric = Metric::get()->byId($metricID);
 		$project = $this->getCurrentProject();
 
 		// If we are on the metrics root page, grab prod data
 		$env = $this->getCurrentEnvironment($project);
 
 		return $metric->query($env->RFCluster, $env->RFStack, $env->RFEnvironment, $startTime);
-
 	}
-
-
-
 }

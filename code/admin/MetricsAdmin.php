@@ -3,8 +3,8 @@
 class MetricsAdmin extends ModelAdmin {
 
 	private static $managed_models = array(
-		'Metric',
-		'MetricSet'
+		'DashboardMetrics\Metric',
+		'DashboardMetrics\MetricSet'
 	);
 
 	private static $url_segment = 'metrics';
