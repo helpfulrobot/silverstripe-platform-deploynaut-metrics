@@ -45,7 +45,15 @@ class MetricsController extends \DNRoot {
 		} else if (! $env->ShowMetrics) {
 			return \Security::permissionFailure();
 		}
-		$metrics = MetricSet::get()->byID($this->getCurrentEnvironment()->MetricSetID)->metrics();
+		$metricset = MetricSet::get()->byID($this->getCurrentEnvironment()->MetricSetID);
+
+		// Check for metrics actually being defined for env
+		if (!$metricset || $metricset == NULL) {
+			$metrics = false;
+		} else {
+			$metrics = $metricset->metrics();
+		}
+
 		return $this->customise(array(
 			'Environment' => $env,
 			'Metrics' => $metrics

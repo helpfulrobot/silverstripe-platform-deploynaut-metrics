@@ -10,19 +10,20 @@
 
 <div class="content">
 
-    <div id="rangeheader">
-        <div id="rangedropdown">
-            <div id="picker">$Range</div>
-            <a class="btn btn-primary">
-                <i class="fa fa-clock-o">
-                </i>
-             Set Range
-            </a>
-        </div>
-    </div>
-
     <div class="metric-set">
         <div class="metrics">
+        <% if $Metrics %>
+
+        <div id="rangeheader">
+            <div id="rangedropdown">
+                <div id="picker">$Range</div>
+                <a class="btn btn-primary">
+                    <i class="fa fa-clock-o"></i>
+                 Set Range
+                </a>
+            </div>
+        </div>
+
         <% loop $Metrics %>
             <h3>$Name</h3>
             <div class="metrics">
@@ -33,6 +34,11 @@
                 </div>
                 <hr>
         <% end_loop %>
+
+        <% else %>
+        <h3>No Metrics to display!</h3>
+        <% end_if %>
+
         </div>
     </div>
 </div>
