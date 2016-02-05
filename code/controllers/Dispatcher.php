@@ -45,10 +45,10 @@ class Dispatcher extends \DNRoot {
 		} else if (! $env->ShowMetrics) {
 			return \Security::permissionFailure();
 		}
-
+		$metrics = \MetricSet::get()->byID($this->getCurrentEnvironment()->MetricSetID)->metrics();
 		return $this->customise(array(
 			'Environment' => $env,
-			'Metrics' => $this->MetricSet()->metrics()
+			'Metrics' => $metrics
 		))->renderWith(array('DashboardMetrics_metrics', 'DNRoot'));
 	}
 
@@ -63,12 +63,6 @@ class Dispatcher extends \DNRoot {
 
 		return $this->render();
 
-	}
-
-	public function MetricSet() {
-		// TODO: Check if there's an alternative default for this project
-
-		return (\MetricSet::get()->byID($this->getCurrentEnvironment()->MetricSetID));
 	}
 
 	public function getRange() {
@@ -106,7 +100,7 @@ class Dispatcher extends \DNRoot {
 	 * @param Metric $metric The metric to return data for
 	 * @todo  Clean this up _significantly_
 	 */
-	public function Data($metricID) {
+	public function getData($metricID) {
 
 		$ago = intval($this->getRequest()->getVar("timeago"));
 		if (!is_numeric($ago) || !in_array($ago, array(1, 2, 4, 8, 12, 24, 48))) {
