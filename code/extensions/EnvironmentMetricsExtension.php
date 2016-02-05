@@ -9,7 +9,7 @@ class EnvironmentMetricsExtension extends \DataExtension {
   );
 
   private static $has_one = array(
-    'MetricSet' => 'MetricSet',
+    'MetricSet' => 'DashboardMetrics\MetricSet',
   );
 
   private static $defaults = array(
@@ -19,7 +19,7 @@ class EnvironmentMetricsExtension extends \DataExtension {
   public function updateCMSFields(\FieldList $fields) {
     if (!$this->owner->Backend()->config()->supports_dashboard_metrics) return;
 
-    foreach (\MetricSet::get() as $metricset) {
+    foreach (MetricSet::get() as $metricset) {
       $metricsetMap[$metricset->ID] = $metricset->Name;
     }
 

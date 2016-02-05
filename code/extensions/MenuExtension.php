@@ -25,7 +25,7 @@ class MenuExtension extends \DataExtension {
 			),
 			'Title' => 'Metrics',
 			'IsCurrent' => $this->owner->isCurrent(),
-			'IsSection' => $this->owner->isSection() && $actionType == Dispatcher::ACTION_METRICS
+			'IsSection' => $this->owner->isSection() && $actionType == MetricsController::ACTION_METRICS
 		)));
 	}
 
