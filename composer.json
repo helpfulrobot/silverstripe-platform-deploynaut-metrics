@@ -1,13 +1,17 @@
 {
-    "name": "gherman/deploynaut-rainforest-metrics",
+    "name": "silverstripe-platform/deploynaut-metrics",
     "description": "Provides an interface to Graphite in the Deploynaut dashboard.",
     "type": "silverstripe-module",
-    "license": "MIT",
+    "license": "BSD-3",
     "authors": [
         {
             "name": "Garion Herman",
             "email": "garion@silverstripe.com"
-        }
+        },
+		{
+			"name": "Andrew Aitken-Fincham",
+			"email": "andrew@silverstripe.com"
+		}
     ],
     "minimum-stability": "dev",
     "require": {
