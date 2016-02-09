@@ -19,13 +19,9 @@ class EnvironmentMetricsExtension extends \DataExtension {
   public function updateCMSFields(\FieldList $fields) {
     if (!$this->owner->Backend()->config()->supports_dashboard_metrics) return;
 
-    foreach (MetricSet::get() as $metricset) {
-      $metricsetMap[$metricset->ID] = $metricset->Name;
-    }
-
     $fields->addFieldsToTab('Root.Metrics', array(
       \CheckboxField::create('ShowMetrics', 'Display Metrics for this environment?'),
-      \DropdownField::create('MetricSetID', 'Metric Set', $metricsetMap)
+      \DropdownField::create('MetricSetID', 'Metric Set', MetricSet::get()->map())
     ));
   }
 }
