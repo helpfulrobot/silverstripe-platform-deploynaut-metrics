@@ -16,7 +16,7 @@ class MetricsController extends \DNRoot implements \PermissionProvider {
 
 	public function providePermissions() {
 		return array(
-			ALLOW_ENVIRONMENT_METRICS_READ => array(
+			self::ALLOW_ENVIRONMENT_METRICS_READ => array(
 				'name' => "Read access to environment metrics",
 				'category' => "Deploynaut",
 			)
