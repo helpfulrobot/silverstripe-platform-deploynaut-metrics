@@ -43,10 +43,10 @@
 </div>
 
 
-<% require css('deploynaut-rainforest-metrics/css/vendor/c3.min.css') %>
-<% require css('deploynaut-rainforest-metrics/css/metrics.css') %>
-<% require javascript('deploynaut-rainforest-metrics/javascript/vendor/moment.js') %>
-<% require javascript('deploynaut-rainforest-metrics/javascript/vendor/d3.min.js') %>
-<% require javascript('deploynaut-rainforest-metrics/javascript/vendor/c3.min.js') %>
-<% require javascript('deploynaut-rainforest-metrics/javascript/metrics.js') %>
-<% require javascript('deploynaut-rainforest-metrics/javascript/timepicker.js') %>
+<% require css('deploynaut-metrics/css/vendor/c3.min.css') %>
+<% require css('deploynaut-metrics/css/metrics.css') %>
+<% require javascript('deploynaut-metrics/javascript/vendor/moment.js') %>
+<% require javascript('deploynaut-metrics/javascript/vendor/d3.min.js') %>
+<% require javascript('deploynaut-metrics/javascript/vendor/c3.min.js') %>
+<% require javascript('deploynaut-metrics/javascript/metrics.js') %>
+<% require javascript('deploynaut-metrics/javascript/timepicker.js') %>
