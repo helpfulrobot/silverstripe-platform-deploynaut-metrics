@@ -5,7 +5,7 @@ namespace DashboardMetrics;
 /**
  * Primary controller for the Metrics interface
  *
- * @package  deploynaut-rainforest-metrics
+ * @package  deploynaut-metrics
  * @author  Garion Herman <garion@silverstripe.com>
  */
 class MetricsController extends \DNRoot implements \PermissionProvider {
